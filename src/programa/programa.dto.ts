@@ -12,3 +12,12 @@ export class ProgramaDto {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface FindAllParameters {
+  nome: string;
+  sigla: string;
+  descricao: string;
+  tipo: string;
+  horarioInicio: Date;
+  horarioFim: Date;
+}

@@ -6,8 +6,9 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
-import { ProgramaDto } from './programa.dto';
+import { FindAllParameters, ProgramaDto } from './programa.dto';
 import { ProgramaService } from './programa.service';
 
 @Controller('programa')
@@ -22,6 +23,11 @@ export class ProgramaController {
   @Get('/:id')
   findById(@Param('id') id: string): ProgramaDto {
     return this.programaService.findById(id);
+  }
+
+  @Get()
+  findAll(@Query() params: FindAllParameters): ProgramaDto[] {
+    return this.programaService.findAll(params);
   }
 
   @Put('/:id')

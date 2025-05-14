@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { ProgramaDto } from './programa.dto';
+import { FindAllParameters, ProgramaDto } from './programa.dto';
 
 @Injectable()
 export class ProgramaService {
@@ -7,7 +7,6 @@ export class ProgramaService {
 
   create(programa: ProgramaDto) {
     this.programas.push(programa);
-    console.log('Programa criado:', this.programas);
   }
 
   findById(id: string): ProgramaDto {
@@ -20,6 +19,17 @@ export class ProgramaService {
       `Programa with ID ${id} not found`,
       HttpStatus.NOT_FOUND,
     );
+  }
+
+  findAll(paramns: FindAllParameters): ProgramaDto[] {
+    const { nome, sigla } = paramns;
+
+    return this.programas.filter((programa) => {
+      return (
+        (nome ? programa.nome.includes(nome) : true) &&
+        (sigla ? programa.sigla.includes(sigla) : true)
+      );
+    });
   }
 
   update(programa: ProgramaDto) {
