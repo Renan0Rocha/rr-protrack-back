@@ -7,7 +7,6 @@ export class ProgramaService {
 
   create(programa: ProgramaDto) {
     this.programas.push(programa);
-    console.log('Programa criado:', this.programas);
   }
 
   findById(id: string): ProgramaDto {
