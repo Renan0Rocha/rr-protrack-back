@@ -13,3 +13,11 @@ export class ClienteDto {
   rg: string;
   status: boolean;
 }
+
+export interface FindAllParameters {
+  nome: string;
+  cpf: string;
+  cnpj: string;
+  razaoSocial: string;
+  rg: string;
+}

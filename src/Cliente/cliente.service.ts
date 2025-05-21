@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { FindAllParameters } from 'src/cliente/cliente.dto';
 import { ClienteDto } from './cliente.dto';
 
 @Injectable()
@@ -20,6 +21,19 @@ export class ClienteService {
       `Cliente with ID ${id} not found`,
       HttpStatus.NOT_FOUND,
     );
+  }
+
+  findAll(paramns: FindAllParameters): ClienteDto[] {
+    const { nome, cpf, cnpj, razaoSocial } = paramns;
+
+    return this.clientes.filter((cliente) => {
+      return (
+        (nome ? cliente.nome.includes(nome) : true) &&
+        (cpf ? cliente.cpf.includes(cpf) : true) &&
+        (cnpj ? cliente.cnpj.includes(cnpj) : true) &&
+        (razaoSocial ? cliente.razaoSocial.includes(razaoSocial) : true)
+      );
+    });
   }
 
   update(cliente: ClienteDto) {
