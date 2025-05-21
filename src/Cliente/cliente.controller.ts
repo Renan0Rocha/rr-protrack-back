@@ -1,30 +1,30 @@
 import {
+  Body,
   Controller,
   Delete,
-  Post,
-  Body,
   Get,
   Param,
+  Post,
   Put,
 } from '@nestjs/common';
-import { clienteDto } from './cliente.dto';
+import { ClienteDto } from './cliente.dto';
 import { ClienteService } from './cliente.service';
 
 @Controller('cliente')
 export class ClienteController {
   constructor(private readonly clienteService: ClienteService) {}
   @Post()
-  create(@Body() cliente: clienteDto) {
+  create(@Body() cliente: ClienteDto) {
     this.clienteService.create(cliente);
   }
 
   @Get('/:id')
-  findById(@Param('id') id: string): clienteDto {
+  findById(@Param('id') id: string): ClienteDto {
     return this.clienteService.findById(id);
   }
 
   @Put('/:id')
-  update(@Body() cliente: clienteDto) {
+  update(@Body() cliente: ClienteDto) {
     this.clienteService.update(cliente);
   }
 

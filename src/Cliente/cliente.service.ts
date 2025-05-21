@@ -1,16 +1,16 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { clienteDto } from './cliente.dto';
+import { ClienteDto } from './cliente.dto';
 
 @Injectable()
 export class ClienteService {
-  private clientes: clienteDto[] = [];
+  private clientes: ClienteDto[] = [];
 
-  create(cliente: clienteDto) {
+  create(cliente: ClienteDto) {
     this.clientes.push(cliente);
     console.log('Cliente criado:', this.clientes);
   }
 
-  findById(id: string): clienteDto {
+  findById(id: string): ClienteDto {
     const foundCliente = this.clientes.filter((p) => p.id === id);
 
     if (foundCliente.length) {
@@ -22,7 +22,7 @@ export class ClienteService {
     );
   }
 
-  update(cliente: clienteDto) {
+  update(cliente: ClienteDto) {
     const clienteIndex = this.clientes.findIndex((p) => p.id === cliente.id);
 
     if (clienteIndex >= 0) {
