@@ -1,0 +1,8 @@
+C:\Users\2023102060020\source\repos\Renan0Rocha\rr-protrack-back\obj\Debug\net8.0\rr-protrack-back.csproj.AssemblyReference.cache
+C:\Users\2023102060020\source\repos\Renan0Rocha\rr-protrack-back\obj\Debug\net8.0\rr-protrack-back.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\2023102060020\source\repos\Renan0Rocha\rr-protrack-back\obj\Debug\net8.0\rr-protrack-back.AssemblyInfoInputs.cache
+C:\Users\2023102060020\source\repos\Renan0Rocha\rr-protrack-back\obj\Debug\net8.0\rr-protrack-back.AssemblyInfo.cs
+C:\Users\2023102060020\source\repos\Renan0Rocha\rr-protrack-back\obj\Debug\net8.0\rr-protrack-back.csproj.CoreCompileInputs.cache
+C:\Users\2023102060020\source\repos\Renan0Rocha\rr-protrack-back\obj\Debug\net8.0\rr-protrack-back.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\2023102060020\source\repos\Renan0Rocha\rr-protrack-back\obj\Debug\net8.0\rr-protrack-back.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\2023102060020\source\repos\Renan0Rocha\rr-protrack-back\obj\Debug\net8.0\rr-protrack-back.sourcelink.json
