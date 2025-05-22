@@ -1,0 +1,6 @@
+@rr_protrack_back_HostAddress = http://localhost:5005
+
+GET {{rr_protrack_back_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
