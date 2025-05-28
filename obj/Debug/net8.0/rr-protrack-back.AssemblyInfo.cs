@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("rr-protrack-back")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8cee398c94a04b38aa6a14c4fb72588fddc6360e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0d89d54bcc23bbfa3efcae6da7564c49b2e50d02")]
 [assembly: System.Reflection.AssemblyProductAttribute("rr-protrack-back")]
 [assembly: System.Reflection.AssemblyTitleAttribute("rr-protrack-back")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
