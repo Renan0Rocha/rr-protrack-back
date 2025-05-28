@@ -1,20 +1,22 @@
-﻿namespace rr_protrack_back.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
+namespace rr_protrack_back.Models
 {
-    [Tags("Filmes")]
+    [Table("filmes")]
     public class Filme
     {
-       
-        
-            public int Id { get; set; }
-            public required string Nome { get; set; }
-            public required string Genero { get; set; }
-            public DateOnly? AnoLancamento { get; set; }
+        public int Id { get; set; }
 
-            public int EstudioId { get; set; }
+        public required string Nome { get; set; }
 
-            public virtual Estudio? Estudio { get; set; }
-           
-        
+        public required string Genero { get; set; }
+
+        public DateOnly? AnoLancamento { get; set; }
+
+        [JsonIgnore]
+        public int? EstudioId { get; set; }
+
+        public virtual Estudio? Estudio { get; set; }
     }
 }
