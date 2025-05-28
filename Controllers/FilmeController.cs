@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ApiLocadora.Dtos;
-using ApiLocadora.DataContext;
+using rr_protrack_back.Dtos;
+using rr_protrack_back.DataContext;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using rr_protrack_back.Services;
 
 
 namespace ApiLocadora.Controllers
@@ -12,56 +13,84 @@ namespace ApiLocadora.Controllers
     [ApiController]
     public class FilmeController : ControllerBase
     {
-       private readonly AppDbContext _context;
+        private readonly FilmeService _service;
 
-        public FilmeController(AppDbContext context)
+        public FilmeController(FilmeService service)
         {
-            _context = context;
+            _service = service;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Buscar()
+        public async Task<IActionResult> GetAll()
         {
-            var listaFilmes = await _context.Filmes.ToListAsync();
+            var listaFilmes = await _service.GetAll();
+
             return Ok(listaFilmes);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Cadastrar([FromBody] FilmeDto item)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetOne(int id)
         {
-           var filme = new Filme
-           {
-               Nome = item.Nome,
-               Genero = item.Genero
-           };
+            try
+            {
+                var filme = await _service.GetOneById(id);
 
-           await _context.Filmes.AddAsync(filme);
-           await _context.SaveChangesAsync();
+                if (filme is null)
+                {
+                    return NotFound("Informacao nao encontrada!");
+                }
 
-           return Created("", filme);
+                return Ok(filme);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] FilmeDto item)
+        {
+            try
+            {
+                var filme = await _service.Create(item);
+
+                if (filme is null)
+                {
+                    return Problem("Ocorreram erros ao salvar!");
+                }
+
+                return Created("", filme);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+
         }
 
         [HttpPut("{id}")]
-        public IActionResult Atualizar(Guid id, [FromBody] FilmeDto item)
+        public async Task<IActionResult> Put(int id, [FromBody] FilmeDto item)
         {
-
-            if (null == null)
+            try
             {
-                return NotFound("Filme não encontrado.");
+                var filme = await _service.Update(id, item);
+
+                if (filme is null)
+                    return NotFound();
+
+                return Ok(filme);
             }
-
-            return Ok();
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
         }
 
-
-        [HttpDelete("{id}")]
-        public IActionResult Remover(Guid id)
-        {
-
-
-            return Ok();
-        }
-
-
+        //[HttpDelete("{id}")]
+        //public IActionResult Remover(Guid id)
+        //{
+        //    return Ok();
+        //}
     }
 }
