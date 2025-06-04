@@ -2,14 +2,11 @@
 
 public class ProgramaDto
 {
-    public Guid? Id { get; set; }
-
     [Required]
+    [MinLength(5)]
     public string Nome { get; set; }
-
     [Required]
     public string Sigla { get; set; }
-
     public string Descricao { get; set; }
     public string Tipo { get; set; }
     public DateTime HorarioInicio { get; set; }

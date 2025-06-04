@@ -14,6 +14,8 @@ namespace rr_protrack_back.DataContext
 
         public DbSet<Estudio> Estudios { get; set; }
 
+        public DbSet<Programa> Programa { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

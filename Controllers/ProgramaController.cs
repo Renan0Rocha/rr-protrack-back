@@ -1,100 +1,128 @@
-﻿// Controllers/ProgramaController.cs
-using rr_protrack_back.DataContext;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Threading.Tasks;
+using Microsoft.VisualStudio.Web.CodeGeneration.Design;
+using rr_protrack_back.DataContext;
+using rr_protrack_back.Dtos;
+using rr_protrack_back.Models;
+using rr_protrack_back.Services;
 
-[Route("programas")]
-[ApiController]
-public class ProgramaController : ControllerBase
+
+namespace rr_protrack_back.Controllers
 {
-    private readonly AppDbContext _context;
-
-    public ProgramaController(AppDbContext context)
+    [Route("programa")]
+    [ApiController]
+    public class ProgramaController(AppDbContext context) : ControllerBase
     {
-        _context = context;
-    }
 
-    [HttpPost]
-    public async Task<IActionResult> Cadastrar([FromBody] ProgramaDto dto)
-    {
-        var programa = new Programa
+        private readonly ProgramaService _service;
+        private readonly AppDbContext _context = context;
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] ProgramaDto item)
         {
-            Id = Guid.NewGuid(),
-            Nome = dto.Nome,
-            Sigla = dto.Sigla,
-            Descricao = dto.Descricao,
-            Tipo = dto.Tipo,
-            HorarioInicio = dto.HorarioInicio,
-            HorarioFim = dto.HorarioFim,
-            DataInicio = dto.DataInicio,
-            DataFim = dto.DataFim,
-            Status = dto.Status,
-            CreatedAt = DateTime.Now,
-            UpdatedAt = DateTime.Now
-        };
+            try
+            {
+                var programa = await _service.Create(item);
 
-        await _context.Programas.AddAsync(programa);
-        await _context.SaveChangesAsync();
+                if (programa is null)
+                {
+                    return Problem("Ocorreram erros ao salvar!");
+                }
 
-        return Created("", programa);
-    }
+                return Created("", programa);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> BuscarPorId(Guid id)
-    {
-        var programa = await _context.Programas.FindAsync(id);
+        }
 
-        if (programa == null)
-            return NotFound();
+        [HttpGet("{id}")]
+        public async Task<IActionResult> BuscarPorId(Guid id)
+        {
+            try
+            {
+                var programa = await _context.Programa.FindAsync(id);
 
-        return Ok(programa);
-    }
+                if (programa == null)
+                    return NotFound();
 
-    [HttpGet]
-    public async Task<IActionResult> BuscarTodos()
-    {
-        var programas = await _context.Programas.ToListAsync();
-        return Ok(programas);
-    }
+                return Ok(programa);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Atualizar(Guid id, [FromBody] ProgramaDto dto)
-    {
-        var programa = await _context.Programas.FindAsync(id);
+        [HttpGet]
+        public async Task<IActionResult> BuscarTodos()
+        {
+            try
+            {
+                var Programa = await _context.Programa.ToListAsync();
+                return Ok(Programa);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
 
-        if (programa == null)
-            return NotFound();
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Atualizar(Guid id, [FromBody] ProgramaDto dto)
+        {
+            try
+            {
+                var programa = await _context.Programa.FindAsync(id); // singular
 
-        programa.Nome = dto.Nome;
-        programa.Sigla = dto.Sigla;
-        programa.Descricao = dto.Descricao;
-        programa.Tipo = dto.Tipo;
-        programa.HorarioInicio = dto.HorarioInicio;
-        programa.HorarioFim = dto.HorarioFim;
-        programa.DataInicio = dto.DataInicio;
-        programa.DataFim = dto.DataFim;
-        programa.Status = dto.Status;
-        programa.UpdatedAt = DateTime.Now;
+                if (programa == null)
+                    return NotFound();
 
-        _context.Programas.Update(programa);
-        await _context.SaveChangesAsync();
+                programa.Nome = dto.Nome;
+                programa.Sigla = dto.Sigla;
+                programa.Descricao = dto.Descricao;
+                programa.Tipo = dto.Tipo;
+                programa.HorarioInicio = TimeOnly.FromDateTime(dto.HorarioInicio);
+                programa.HorarioFim = TimeOnly.FromDateTime(dto.HorarioFim);
+                programa.DataInicio = DateOnly.FromDateTime(dto.DataInicio);
+                programa.DataFim = DateOnly.FromDateTime(dto.DataFim);
+                programa.Status = dto.Status;
+                programa.UpdatedAt = DateTime.Now;
 
-        return Ok(programa);
-    }
+                _context.Programa.Update(programa); // singular
+                await _context.SaveChangesAsync();
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Remover(Guid id)
-    {
-        var programa = await _context.Programas.FindAsync(id);
+                return Ok(programa);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
 
-        if (programa == null)
-            return NotFound();
 
-        _context.Programas.Remove(programa);
-        await _context.SaveChangesAsync();
 
-        return NoContent();
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Remover(Guid id)
+        {
+            try
+            {
+                var programa = await _context.Programa.FindAsync(id);
+
+                if (programa == null)
+                    return NotFound();
+
+                _context.Programa.Remove(programa);
+                await _context.SaveChangesAsync();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
     }
 }
