@@ -16,6 +16,8 @@ namespace rr_protrack_back.DataContext
 
         public DbSet<Programa> Programa { get; set; }
 
+        public DbSet<Cliente> Cliente { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

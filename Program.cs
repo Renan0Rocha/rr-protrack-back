@@ -26,6 +26,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 );
 
 builder.Services.AddScoped<FilmeService>();
+builder.Services.AddScoped<ProgramaService>();
+builder.Services.AddScoped<ClienteService>();
 
 var app = builder.Build();
 

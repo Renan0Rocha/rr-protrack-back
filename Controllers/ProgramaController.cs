@@ -15,6 +15,7 @@ namespace rr_protrack_back.Controllers
     {
 
         private readonly ProgramaService _service;
+
         private readonly AppDbContext _context = context;
 
         [HttpPost]
@@ -75,7 +76,7 @@ namespace rr_protrack_back.Controllers
         {
             try
             {
-                var programa = await _context.Programa.FindAsync(id); // singular
+                var programa = await _context.Programa.FindAsync(id);
 
                 if (programa == null)
                     return NotFound();
@@ -91,7 +92,7 @@ namespace rr_protrack_back.Controllers
                 programa.Status = dto.Status;
                 programa.UpdatedAt = DateTime.Now;
 
-                _context.Programa.Update(programa); // singular
+                _context.Programa.Update(programa);
                 await _context.SaveChangesAsync();
 
                 return Ok(programa);

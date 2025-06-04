@@ -44,10 +44,12 @@ namespace rr_protrack_back.Services
                 var newPrograma = new Programa
                 {
                     Nome = progama.Nome,
-                    Sigla = progama.Sigla,  
+                    Sigla = progama.Sigla,
+                    Descricao = progama.Descricao,
                     Tipo = progama.Tipo,  
                     Status = progama.Status, 
                     DataInicio = new DateOnly(data.Year, data.Month, data.Day)
+
                 };
 
                 await _context.Programa.AddAsync(newPrograma);
