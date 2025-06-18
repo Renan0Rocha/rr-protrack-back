@@ -1,22 +1,30 @@
-﻿using Microsoft.EntityFrameworkCore;
-using rr_protrack_back.DataContext;
-using rr_protrack_back.Dtos;
-using rr_protrack_back.Models;
+﻿using ApiLocadora.Common.Exceptions;
+using ApiLocadora.DataContexts;
+using ApiLocadora.Dtos;
+using ApiLocadora.Models;
+using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
+using System.Net;
+using System.Windows.Markup;
 
-namespace rr_protrack_back.Services
+namespace ApiLocadora.Services
 {
     public class FilmeService
     {
         private readonly AppDbContext _context;
 
-        public FilmeService(AppDbContext context)
+        private readonly IMapper _mapper;
+
+        public FilmeService(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<ICollection<Filme>> GetAll()
         {
-            var list = await _context.Filmes.ToListAsync();
+            var list = await _context.Filmes.Include(e => e.Estudio).ToListAsync();
 
             return list;
         }
@@ -38,14 +46,7 @@ namespace rr_protrack_back.Services
         {
             try
             {
-                var data = filme.AnoLancamento;
-
-                var newFilme = new Filme
-                {
-                    Nome = filme.Nome,
-                    Genero = filme.Genero,
-                    AnoLancamento = new DateOnly(data.Year, data.Month, data.Day)
-                };
+                var newFilme = _mapper.Map<Filme>(filme);
 
                 await _context.Filmes.AddAsync(newFilme);
                 await _context.SaveChangesAsync();
@@ -57,7 +58,7 @@ namespace rr_protrack_back.Services
                 throw;
             }
         }
-
+        
         public async Task<Filme?> Update(int id, FilmeDto filme)
         {
             try
@@ -79,9 +80,9 @@ namespace rr_protrack_back.Services
             }
             catch (Exception ex)
             {
-                throw ex;
+                    throw ex;
             }
-
+            
         }
 
         public async Task<Filme?> Delete(int id)
