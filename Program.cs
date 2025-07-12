@@ -2,10 +2,13 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using rr_protrack_back.DataContext;
 using rr_protrack_back.Services;
+using rr_protrack_back.DataContexts;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddAutoMapper(typeof(MapperProfile));
 
 builder.Services.AddControllers().AddJsonOptions(x =>
 {
@@ -25,9 +28,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     .UseSnakeCaseNamingConvention()
 );
 
-builder.Services.AddScoped<FilmeService>();
-builder.Services.AddScoped<ProgramaService>();
-builder.Services.AddScoped<ClienteService>();
+//builder.Services.AddScoped<ProgramaService>();
+//builder.Services.AddScoped<ClienteService>();
+builder.Services.AddScoped<VendedorService>();
 
 var app = builder.Build();
 
