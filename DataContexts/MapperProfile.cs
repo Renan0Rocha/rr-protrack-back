@@ -25,6 +25,8 @@ namespace rr_protrack_back.DataContexts
 
             CreateMap<Vendedor, VendedorResponseDto>();
 
+            CreateMap<VendedorClienteDto, Vendedor>().ReverseMap();
+
             CreateMap<Cliente, ClienteDto>()
             .ForMember(dest => dest.Endereco, opt => opt.MapFrom(src => src.Endereco))
             .ForMember(dest => dest.Vendedor, opt => opt.MapFrom(src => src.Vendedor))
@@ -50,7 +52,6 @@ namespace rr_protrack_back.DataContexts
 
             CreateMap<ContratoDto, Contrato>()
             .ForMember(dest => dest.Horarios, opt => opt.MapFrom(src => string.Join(",", src.Horarios)));
-
 
         }
     }

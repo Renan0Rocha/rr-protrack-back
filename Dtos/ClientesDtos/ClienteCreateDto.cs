@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using rr_protrack_back.Dtos.VendedoresDtos;
+using System.ComponentModel.DataAnnotations;
 
 namespace rr_protrack_back.Dtos.ClientesDtos
 {
@@ -13,7 +14,7 @@ namespace rr_protrack_back.Dtos.ClientesDtos
         [Required]
         public required string Telefone { get; set; }
         [Required]
-        public required int VendedorId { get; set; }
+        public required VendedorClienteDto Vendedor { get; set; }
         [Required]
         public required EnderecoDto Endereco { get; set; }
     }
