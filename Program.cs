@@ -4,6 +4,7 @@ using rr_protrack_back.DataContext;
 using rr_protrack_back.Services;
 using rr_protrack_back.DataContexts;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -14,6 +15,15 @@ builder.Services.AddControllers().AddJsonOptions(x =>
 {
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     x.JsonSerializerOptions.WriteIndented = true;
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.WithOrigins("*").AllowAnyHeader().AllowAnyMethod();
+        });
 });
 
 builder.Services.AddEndpointsApiExplorer();
@@ -28,11 +38,20 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     .UseSnakeCaseNamingConvention()
 );
 
-//builder.Services.AddScoped<ProgramaService>();
-//builder.Services.AddScoped<ClienteService>();
 builder.Services.AddScoped<VendedorService>();
+builder.Services.AddScoped<EnderecoService>();
+builder.Services.AddScoped<ProgramaService>();
+builder.Services.AddScoped<InsercaoService>();
+builder.Services.AddScoped<OrdemBlocoService>();
+builder.Services.AddScoped<ClienteService>();
+builder.Services.AddScoped<ContratoService>();
+builder.Services.AddScoped<OrdemBlocoContratoService>();
+
+
 
 var app = builder.Build();
+
+app.UseCors();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
