@@ -13,8 +13,8 @@ namespace rr_protrack_back.Dtos.ClientesDtos
         [Required]
         public required string Telefone { get; set; }
         [Required]
-        public required int EnderecoId { get; set; }
-        [Required]
         public required int VendedorId { get; set; }
+        [Required]
+        public required EnderecoDto Endereco { get; set; }
     }
 }
