@@ -19,7 +19,7 @@ namespace rr_protrack_back.DataContexts
             CreateMap<EnderecoDto, Endereco>()
             .ForMember(dest => dest.Id, opt => opt.Ignore()).ReverseMap();
 
-            CreateMap<ClienteCreateDto, Cliente>();
+            CreateMap<ClienteCreateDto, Cliente>().ReverseMap();
 
             CreateMap<Cliente, ClienteResponseDto>();
 
@@ -46,9 +46,7 @@ namespace rr_protrack_back.DataContexts
 
             CreateMap<OrdemBlocoContrato, OrdemBlocoContratoDto>().ReverseMap();
 
-            CreateMap<Contrato, ContratoDto>()
-            .ForMember(dest => dest.Horarios, opt => opt.MapFrom(src =>
-             src.Horarios.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(h => h.Trim()).ToList()));
+            CreateMap<Contrato, ContratoDto>().ReverseMap();
 
             CreateMap<ContratoDto, Contrato>()
             .ForMember(dest => dest.Horarios, opt => opt.MapFrom(src => string.Join(",", src.Horarios)));
