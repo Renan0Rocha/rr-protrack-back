@@ -1,48 +1,45 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using rr_protrack_back.Dtos.ClientesDtos;
-using rr_protrack_back.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using rr_protrack_back.Dtos;
 using rr_protrack_back.Services;
 
 namespace rr_protrack_back.Controllers
 {
     [ApiController]
-    [Route("cliente")]
-    public class ClienteController : ControllerBase
+    [Route("api/[controller]")]
+    public class InsercaoController : ControllerBase
     {
-        private readonly ClienteService _service;
+        private readonly InsercaoService _service;
 
-        public ClienteController(ClienteService service)
+        public InsercaoController(InsercaoService service)
         {
             _service = service;
         }
-
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var clientes = await _service.GetAllAsync();
-            return Ok(clientes);
+            var result = await _service.GetAllAsync();
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var cliente = await _service.GetByIdAsync(id);
-            return cliente == null ? NotFound() : Ok(cliente);
+            var result = await _service.GetByIdAsync(id);
+            return result == null ? NotFound() : Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] ClienteCreateDto dto)
+        public async Task<IActionResult> Create([FromBody] InsercaoDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var created = await _service.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+            var result = await _service.CreateAsync(dto);
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] ClienteDto dto)
+        public async Task<IActionResult> Update(int id, [FromBody] InsercaoDto dto)
         {
             var updated = await _service.UpdateAsync(id, dto);
             return updated ? NoContent() : NotFound();
@@ -55,4 +52,5 @@ namespace rr_protrack_back.Controllers
             return deleted ? NoContent() : NotFound();
         }
     }
+
 }

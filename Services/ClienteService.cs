@@ -1,98 +1,79 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.Web.CodeGeneration.Design;
-using rr_protrack_back.DataContext;
-using rr_protrack_back.Dtos;
-using rr_protrack_back.Models;
+﻿using AutoMapper;
+using global::rr_protrack_back.DataContext;
+using global::rr_protrack_back.Dtos;
+using global::rr_protrack_back.Models;
+using Microsoft.EntityFrameworkCore;
+using rr_protrack_back.Dtos.ClientesDtos;
+
 
 namespace rr_protrack_back.Services
-{
-    public class ClienteService
     {
-        private readonly AppDbContext _context;
-
-        public ClienteService(AppDbContext context)
+        public class ClienteService
         {
-            _context = context;
-        }
+            private readonly AppDbContext _context;
+            private readonly IMapper _mapper;
 
-        public async Task<ICollection<Cliente>> GetAll()
-        {
-            var list = await _context.Cliente.ToListAsync();
-
-            return list;
-        }
-
-        public async Task<Cliente?> GetOneById(int id)
-        {
-            try
+            public ClienteService(AppDbContext context, IMapper mapper)
             {
-                return await _context.Cliente
-                    .SingleOrDefaultAsync(x => x.Id == id);
+                _context = context;
+                _mapper = mapper;
             }
-            catch (Exception ex)
+
+            public async Task<List<ClienteDto>> GetAllAsync()
             {
-                throw ex;
+                var clientes = await _context.Cliente.ToListAsync();
+
+                return _mapper.Map<List<ClienteDto>>(clientes);
             }
-        }
 
-        public async Task<Cliente?> Create(ClienteDto cliente)
-        {
-            try
+            public async Task<ClienteDto?> GetByIdAsync(int id)
             {
-                
+                var cliente = await _context.Cliente
+                    .Include(c => c.Endereco)
+                    .Include(c => c.Vendedor)
+                    .FirstOrDefaultAsync(c => c.Id == id);
 
-                var newCliente = new Cliente
-                {
-                    Nome = cliente.Nome,
-                   
+                return cliente == null ? null : _mapper.Map<ClienteDto>(cliente);
+            }
 
-                };
+            public async Task<ClienteDto> CreateAsync(ClienteCreateDto dto)
+            {
+                var cliente = _mapper.Map<Cliente>(dto);
 
-                await _context.Cliente.AddAsync(newCliente);
+                _context.Entry(cliente).Reference(c => c.Endereco).IsModified = false;
+                _context.Entry(cliente).Reference(c => c.Vendedor).IsModified = false;
+
+                _context.Cliente.Add(cliente);
                 await _context.SaveChangesAsync();
 
-                return newCliente;
+                var clienteCompleto = await _context.Cliente
+                    .Include(c => c.Endereco)
+                    .Include(c => c.Vendedor)
+                    .FirstOrDefaultAsync(c => c.Id == cliente.Id);
+
+                return _mapper.Map<ClienteDto>(clienteCompleto);
             }
-            catch (Exception)
+
+            public async Task<bool> UpdateAsync(int id, ClienteDto dto)
             {
-                throw;
-            }
-        }
+                var cliente = await _context.Cliente.FindAsync(id);
+                if (cliente == null) return false;
 
-        public async Task<Cliente?> Update(int id, ClienteDto cliente)
-        {
-            try
-            {
-                var _cliente = await GetOneById(id);
-
-                if (_cliente is null)
-                {
-                    return _cliente;
-                }
-
-                _cliente.Nome = cliente.Nome;
-
-
-                _context.Cliente.Update(_cliente);
+                _mapper.Map(dto, cliente);
                 await _context.SaveChangesAsync();
-
-                return _cliente;
+                return true;
             }
-            catch (Exception ex)
+
+            public async Task<bool> DeleteAsync(int id)
             {
-                throw ex;
+                var cliente = await _context.Cliente.FindAsync(id);
+                if (cliente == null) return false;
+
+                _context.Cliente.Remove(cliente);
+                await _context.SaveChangesAsync();
+                return true;
             }
-
-        }
-
-        public async Task<Cliente?> Delete(int id)
-        {
-            return null;
-        }
-
-        private async Task<bool> Exist(int id)
-        {
-            return await _context.Cliente.AnyAsync(c => c.Id == id);
         }
     }
-}
+
+
