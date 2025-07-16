@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.Web.CodeGeneration.Design;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using rr_protrack_back.DataContext;
 using rr_protrack_back.Dtos;
 using rr_protrack_back.Models;
@@ -9,94 +9,58 @@ namespace rr_protrack_back.Services
     public class ProgramaService
     {
         private readonly AppDbContext _context;
+        private readonly OrdemBlocoService _ordemBlocoService;
+        private readonly IMapper _mapper;
 
-        public ProgramaService(AppDbContext context)
+        public ProgramaService(AppDbContext context, OrdemBlocoService ordemBlocoService, IMapper mapper)
         {
             _context = context;
+            _ordemBlocoService = ordemBlocoService;
+            _mapper = mapper;
         }
 
-        public async Task<ICollection<Programa>> GetAll()
+        public async Task<ProgramaDto> CreateAsync(ProgramaDto dto)
+        {
+            var entity = _mapper.Map<Programa>(dto);
+            _context.Programa.Add(entity);
+            await _context.SaveChangesAsync();
+            await _ordemBlocoService.GerarOrdemBlocoParaProgramaAsync(entity);
+
+            return _mapper.Map<ProgramaDto>(entity);
+
+        }
+
+        public async Task<ProgramaDto?> GetByIdAsync(int id)
+        {
+            var entity = await _context.Programa.FindAsync(id);
+            return entity == null ? null : _mapper.Map<ProgramaDto>(entity);
+        }
+
+        public async Task<List<ProgramaDto>> GetAllAsync()
         {
             var list = await _context.Programa.ToListAsync();
-
-            return list;
+            return _mapper.Map<List<ProgramaDto>>(list);
         }
 
-        public async Task<Programa?> GetOneById(int id)
+        public async Task<bool> UpdateAsync(int id, ProgramaDto dto)
         {
-            try
-            {
-                return await _context.Programa
-                    .SingleOrDefaultAsync(x => x.Id == id);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            var entity = await _context.Programa.FindAsync(id);
+            if (entity == null) return false;
+
+            _mapper.Map(dto, entity);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public async Task<Programa?> Create(ProgramaDto progama)
+        public async Task<bool> DeleteAsync(int id)
         {
-            try
-            {
-                var data = progama.DataInicio;
+            var entity = await _context.Programa.FindAsync(id);
+            if (entity == null) return false;
 
-                var newPrograma = new Programa
-                {
-                    Nome = progama.Nome,
-                    Sigla = progama.Sigla,
-                    Descricao = progama.Descricao,
-                    Tipo = progama.Tipo,  
-                    Status = progama.Status, 
-                    DataInicio = new DateOnly(data.Year, data.Month, data.Day)
-
-                };
-
-                await _context.Programa.AddAsync(newPrograma);
-                await _context.SaveChangesAsync();
-
-                return newPrograma;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public async Task<Programa?> Update(int id, ProgramaDto programa)
-        {
-            try
-            {
-                var _programa = await GetOneById(id);
-
-                if (_programa is null)
-                {
-                    return _programa;
-                }
-
-                _programa.Nome = programa.Nome;
-              
-
-                _context.Programa.Update(_programa);
-                await _context.SaveChangesAsync();
-
-                return _programa;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-        }
-
-        public async Task<Programa?> Delete(int id)
-        {
-            return null;
-        }
-
-        private async Task<bool> Exist(int id)
-        {
-            return await _context.Programa.AnyAsync(c => c.Id == id);
+            _context.Programa.Remove(entity);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
+
 }

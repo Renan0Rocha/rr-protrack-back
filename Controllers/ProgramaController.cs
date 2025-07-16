@@ -1,129 +1,59 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.Web.CodeGeneration.Design;
-using rr_protrack_back.DataContext;
-using rr_protrack_back.Dtos;
-using rr_protrack_back.Models;
 using rr_protrack_back.Services;
 
 
 namespace rr_protrack_back.Controllers
 {
-    [Route("programa")]
     [ApiController]
-    public class ProgramaController(AppDbContext context) : ControllerBase
+    [Route("programa")]
+    public class ProgramaController : ControllerBase
     {
-
         private readonly ProgramaService _service;
 
-        private readonly AppDbContext _context = context;
-
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] ProgramaDto item)
+        public ProgramaController(ProgramaService service)
         {
-            try
-            {
-                var programa = await _service.Create(item);
-
-                if (programa is null)
-                {
-                    return Problem("Ocorreram erros ao salvar!");
-                }
-
-                return Created("", programa);
-            }
-            catch (Exception ex)
-            {
-                return Problem(ex.Message);
-            }
-
-        }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> BuscarPorId(Guid id)
-        {
-            try
-            {
-                var programa = await _context.Programa.FindAsync(id);
-
-                if (programa == null)
-                    return NotFound();
-
-                return Ok(programa);
-            }
-            catch (Exception ex)
-            {
-                return Problem(ex.Message);
-            }
+            _service = service;
         }
 
         [HttpGet]
-        public async Task<IActionResult> BuscarTodos()
+        public async Task<IActionResult> GetAll()
         {
-            try
-            {
-                var Programa = await _context.Programa.ToListAsync();
-                return Ok(Programa);
-            }
-            catch (Exception ex)
-            {
-                return Problem(ex.Message);
-            }
+            var result = await _service.GetAllAsync();
+            return Ok(result);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] ProgramaDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _service.CreateAsync(dto);
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var result = await _service.GetByIdAsync(id);
+            return result == null ? NotFound() : Ok(result);
+        }
+
+        
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Atualizar(Guid id, [FromBody] ProgramaDto dto)
+        public async Task<IActionResult> Update(int id, [FromBody] ProgramaDto dto)
         {
-            try
-            {
-                var programa = await _context.Programa.FindAsync(id);
-
-                if (programa == null)
-                    return NotFound();
-
-                programa.Nome = dto.Nome;
-                programa.Sigla = dto.Sigla;
-                programa.Descricao = dto.Descricao;
-                programa.Tipo = dto.Tipo;
-                programa.HorarioInicio = TimeOnly.FromDateTime(dto.HorarioInicio);
-                programa.HorarioFim = TimeOnly.FromDateTime(dto.HorarioFim);
-                programa.DataInicio = DateOnly.FromDateTime(dto.DataInicio);
-                programa.DataFim = DateOnly.FromDateTime(dto.DataFim);
-                programa.Status = dto.Status;
-                programa.UpdatedAt = DateTime.Now;
-
-                _context.Programa.Update(programa);
-                await _context.SaveChangesAsync();
-
-                return Ok(programa);
-            }
-            catch (Exception ex)
-            {
-                return Problem(ex.Message);
-            }
+            var updated = await _service.UpdateAsync(id, dto);
+            return updated ? NoContent() : NotFound();
         }
-
-
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Remover(Guid id)
+        public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                var programa = await _context.Programa.FindAsync(id);
-
-                if (programa == null)
-                    return NotFound();
-
-                _context.Programa.Remove(programa);
-                await _context.SaveChangesAsync();
-
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return Problem(ex.Message);
-            }
+            var deleted = await _service.DeleteAsync(id);
+            return deleted ? NoContent() : NotFound();
         }
     }
+
 }

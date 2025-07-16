@@ -2,16 +2,30 @@
 
 public class ProgramaDto
 {
+    public int Id { get; set; }
+
     [Required]
-    [MinLength(5)]
     public string Nome { get; set; }
+
     [Required]
     public string Sigla { get; set; }
-    public string Descricao { get; set; }
-    public string Tipo { get; set; }
-    public DateTime HorarioInicio { get; set; }
-    public DateTime HorarioFim { get; set; }
-    public DateTime DataInicio { get; set; }
-    public DateTime DataFim { get; set; }
-    public string Status { get; set; }
+
+    [Required]
+    public List<string> DiasSemana { get; set; }
+
+    [Required]
+    public string HorarioInicio { get; set; }
+
+    [Required]
+    public string HorarioFim { get; set; }
+
+    [Required]
+    public string Duracao { get; set; }
+
+    [Required]
+    public DateOnly DataInicio { get; set; }
+
+    [Required]
+    public DateOnly DataFim { get; set; }
 }
+
