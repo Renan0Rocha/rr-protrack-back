@@ -12,7 +12,7 @@ namespace rr_protrack_back.DataContexts
     {
         public MapperProfile()
         {
-            CreateMap<VendedorDto, Vendedor>();
+            CreateMap<VendedorDto, Vendedor>().ReverseMap();
             
             CreateMap<EnderecoDto, Endereco>().ReverseMap();
 

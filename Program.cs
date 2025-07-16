@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddAutoMapper(typeof(MapperProfile));
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
 builder.Services.AddControllers().AddJsonOptions(x =>
 {
