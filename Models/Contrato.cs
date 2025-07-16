@@ -14,7 +14,7 @@ namespace rr_protrack_back.Models
         public required DateOnly DataEmissao { get; set; }
         public required DateOnly DataInicio { get; set; }
         public required DateOnly DataFim { get; set; }
-        public required List<string> Horarios { get; set; }
+        public required string Horarios { get; set; }
         public required int TotalInsercoes { get; set; }
         public required double ValorBruto { get; set; }
         public required double ValorDesconto { get; set; }

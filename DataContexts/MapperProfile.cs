@@ -42,14 +42,14 @@ namespace rr_protrack_back.DataContexts
 
             CreateMap<Programa, ProgramaResponseDto>().ReverseMap();
 
-            CreateMap<ContratoCreateDto, Contrato>();
-
             CreateMap<OrdemBlocoContrato, OrdemBlocoContratoDto>().ReverseMap();
 
-            CreateMap<Contrato, ContratoDto>().ReverseMap();
+            CreateMap<ContratoCreateDto, Contrato>()
+    .       ForMember(dest => dest.Horarios, opt => opt.MapFrom(src => string.Join(",", src.Horarios)));
 
-            CreateMap<ContratoDto, Contrato>()
-            .ForMember(dest => dest.Horarios, opt => opt.MapFrom(src => string.Join(",", src.Horarios)));
+            CreateMap<Contrato, ContratoDto>()
+            .ForMember(dest => dest.Horarios, opt => opt.MapFrom(src => src.Horarios.Split(',', StringSplitOptions.RemoveEmptyEntries)
+            .Select(h => h.Trim()).ToList()));
 
         }
     }
