@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using rr_protrack_back.Dtos.ProgramasDtos;
 
 namespace rr_protrack_back.Dtos
 {
@@ -12,7 +13,7 @@ namespace rr_protrack_back.Dtos
         [Required]
         public int ProgramaId { get; set; }
 
-        public ProgramaDto? Programa { get; set; }
+        public ProgramaResponseDto? Programa { get; set; }
     }
 
 }

@@ -21,7 +21,10 @@ namespace rr_protrack_back.Services
 
             public async Task<List<ClienteDto>> GetAllAsync()
             {
-                var clientes = await _context.Cliente.ToListAsync();
+                var clientes = await _context.Cliente
+                .Include(c => c.Endereco)
+                .Include(c => c.Vendedor)
+                .ToListAsync();
 
                 return _mapper.Map<List<ClienteDto>>(clientes);
             }
@@ -54,7 +57,7 @@ namespace rr_protrack_back.Services
                 return _mapper.Map<ClienteDto>(clienteCompleto);
             }
 
-            public async Task<bool> UpdateAsync(int id, ClienteDto dto)
+            public async Task<bool> UpdateAsync(int id, ClienteCreateDto dto)
             {
                 var cliente = await _context.Cliente.FindAsync(id);
                 if (cliente == null) return false;

@@ -58,6 +58,12 @@ namespace rr_protrack_back.DataContext
                 .HasOne(obc => obc.OrdemBloco)
                 .WithMany(ob => ob.OrdemBlocoContrato)
                 .HasForeignKey(obc => obc.OrdemBlocoId);
+
+            modelBuilder.Entity<Contrato>()
+                .HasOne(c => c.Insercao)
+                .WithMany(i => i.Contratos)
+                .HasForeignKey(c => c.InsercaoId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
 

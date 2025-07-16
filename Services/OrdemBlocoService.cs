@@ -48,13 +48,19 @@ namespace rr_protrack_back.Services
 
         public async Task<List<OrdemBlocoDto>> GetAllAsync()
         {
-            var blocos = await _context.OrdemBloco.ToListAsync();
+            var blocos = await _context.OrdemBloco
+                .Include(b => b.Programa)
+                .ToListAsync();
+
             return _mapper.Map<List<OrdemBlocoDto>>(blocos);
         }
 
         public async Task<OrdemBlocoDto?> GetByIdAsync(int id)
         {
-            var bloco = await _context.OrdemBloco.FindAsync(id);
+            var bloco = await _context.OrdemBloco
+                .Include(b => b.Programa)
+                .FirstOrDefaultAsync(b => b.Id == id);
+
             return bloco == null ? null : _mapper.Map<OrdemBlocoDto>(bloco);
         }
 

@@ -42,7 +42,7 @@ namespace rr_protrack_back.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] ClienteDto dto)
+        public async Task<IActionResult> Update(int id, [FromBody] ClienteCreateDto dto)
         {
             var updated = await _service.UpdateAsync(id, dto);
             return updated ? NoContent() : NotFound();

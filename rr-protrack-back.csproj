@@ -8,9 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Common\**" />
     <Compile Remove="Dtos\NovaPasta1\**" />
+    <Content Remove="Common\**" />
     <Content Remove="Dtos\NovaPasta1\**" />
+    <EmbeddedResource Remove="Common\**" />
     <EmbeddedResource Remove="Dtos\NovaPasta1\**" />
+    <None Remove="Common\**" />
     <None Remove="Dtos\NovaPasta1\**" />
   </ItemGroup>
 
@@ -38,7 +42,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Common\" />
     <Folder Include="Validations\" />
   </ItemGroup>
 

@@ -5,5 +5,7 @@
         public int Id { get; set; }
         public required string Tempo { get; set; }
         public required double Valor { get; set; }
+
+        public ICollection<Contrato>? Contratos { get; set; }
     }
 }
