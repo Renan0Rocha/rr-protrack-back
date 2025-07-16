@@ -42,9 +42,11 @@ namespace rr_protrack_back.Services
             public async Task<ClienteDto> CreateAsync(ClienteCreateDto dto)
             {
                 var cliente = _mapper.Map<Cliente>(dto);
+                Console.WriteLine($"CPF após mapping: {cliente.Cpf}");
 
                 _context.Entry(cliente).Reference(c => c.Endereco).IsModified = false;
                 _context.Entry(cliente).Reference(c => c.Vendedor).IsModified = false;
+                
 
                 _context.Cliente.Add(cliente);
                 await _context.SaveChangesAsync();

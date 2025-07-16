@@ -19,7 +19,9 @@ namespace rr_protrack_back.DataContexts
             CreateMap<EnderecoDto, Endereco>()
             .ForMember(dest => dest.Id, opt => opt.Ignore()).ReverseMap();
 
-            CreateMap<ClienteCreateDto, Cliente>().ReverseMap();
+            CreateMap<ClienteCreateDto, Cliente>()
+            .ForMember(dest => dest.Endereco, opt => opt.MapFrom(src => src.Endereco))
+            .ReverseMap();
 
             CreateMap<Cliente, ClienteResponseDto>();
 
