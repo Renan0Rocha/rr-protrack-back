@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using rr_protrack_back.DataContext;
-using rr_protrack_back.Dtos;
+using rr_protrack_back.Dtos.VendedoresDtos;
 using rr_protrack_back.Models;
 
 namespace rr_protrack_back.Services

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using rr_protrack_back.Dtos;
 using rr_protrack_back.Services;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -8,12 +7,13 @@ using System.Linq;
 using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using rr_protrack_back.Dtos.VendedoresDtos;
 
 
 namespace rr_protrack_back.Controllers
 {
         [ApiController]
-        [Route("api/[controller]")]
+        [Route("[controller]")]
         public class VendedorController : ControllerBase
         {
             private readonly VendedorService _service;
@@ -21,6 +21,20 @@ namespace rr_protrack_back.Controllers
             public VendedorController(VendedorService service)
             {
                 _service = service;
+            }
+
+            [HttpGet]
+            public async Task<IActionResult> GetAll()
+            {
+                var result = await _service.GetAll();
+                return Ok(result);
+            }
+
+            [HttpGet("{id}")]
+            public async Task<IActionResult> GetById(int id)
+            {
+                var result = await _service.GetById(id);
+                return result == null ? NotFound() : Ok(result);
             }
 
             [HttpPost]
@@ -31,20 +45,6 @@ namespace rr_protrack_back.Controllers
 
                 var created = await _service.Create(dto);
                 return CreatedAtAction(nameof(GetById), new { id = created.Cpf }, created);
-            }
-
-            [HttpGet("{id}")]
-            public async Task<IActionResult> GetById(int id)
-            {
-                var result = await _service.GetById(id);
-                return result == null ? NotFound() : Ok(result);
-            }
-
-            [HttpGet]
-            public async Task<IActionResult> GetAll()
-            {
-                var result = await _service.GetAll();
-                return Ok(result);
             }
 
             [HttpPut("{id}")]

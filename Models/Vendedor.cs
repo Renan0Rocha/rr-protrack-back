@@ -7,5 +7,8 @@
         public required DateOnly DataNascimento { get; set; }
         public required string Cpf { get; set; }
         public string? Vinculo { get; set; }
+
+        public ICollection<Cliente>? Clientes { get; set; }
     }
 }
+ 
