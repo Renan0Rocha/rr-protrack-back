@@ -5,7 +5,7 @@ using rr_protrack_back.Services;
 namespace rr_protrack_back.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("insercao")]
     public class InsercaoController : ControllerBase
     {
         private readonly InsercaoService _service;

@@ -13,7 +13,7 @@ using rr_protrack_back.Dtos.VendedoresDtos;
 namespace rr_protrack_back.Controllers
 {
         [ApiController]
-        [Route("[controller]")]
+        [Route("vendedor")]
         public class VendedorController : ControllerBase
         {
             private readonly VendedorService _service;
